@@ -7,7 +7,7 @@
 from newsapi import NewsApiClient
 import random
 from pyknp import KNP
-from pyknp import Jumanpp
+from pyknp import Juman
 import sys
 from News import create_infos
 

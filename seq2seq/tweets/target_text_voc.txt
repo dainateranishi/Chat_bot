@@ -1,7 +1,7 @@
 <GO>
-<unk>
-<s>
-</s>
+<UNK>
+<START>
+<EOS>
 です
 ね
 の

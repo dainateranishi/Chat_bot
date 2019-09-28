@@ -74,6 +74,7 @@ class Reply:
         elif count == 2:
             return "最近では「" + self.midashi + "」だそうです"
         else:
+            print("DBDC or Seq2seq")
             if news.news_uttetance(sentence, self.all_infos) != "No information":
                 print("news")
                 return news.news_uttetance(sentence, self.all_infos)
@@ -82,8 +83,12 @@ class Reply:
                 reply_candidate = []
                 print("else")
                 emb_sen = input_embedding(sentence)
-                reply_candidate.append(dbdc.utterance_from_dbdc(emb_sen))
-                reply_candidate.append(seq2seq.utterance_from_seq2seq(emb_sen))
+                rep_dbdc = dbdc.utterance_from_dbdc(emb_sen)
+                print("DBDC:{}\n".format(rep_dbdc))
+                reply_candidate.append(rep_dbdc)
+                rep_seq2seq = seq2seq.utterance_from_seq2seq(emb_sen)
+                print("Seq2Seq:{}\n".format(rep_seq2seq))
+                reply_candidate.append(rep_seq2seq)
                 
                 return random.choice(reply_candidate)
             

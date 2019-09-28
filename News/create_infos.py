@@ -239,7 +239,10 @@ def create_infos(topic):
     all_infos = []
     midashi, sentences = get_ramdom_news(get_headlines(topic))
     
-    #print(sentences)
+    while not isinstance(sentences, list):
+        print("NOt list")
+        midashi, sentences = get_ramdom_news(get_headlines(topic))
+        
     
     for i, line in enumerate(sentences):
         #print(line + "\n")

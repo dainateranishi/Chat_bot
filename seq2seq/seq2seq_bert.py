@@ -22,7 +22,7 @@ import re
 import numpy as np
 import os
 import time
-from pyknp import Jumanpp
+from pyknp import Juman
 import sys
 #from .bert import modeling
 #from .bert import tokenization
@@ -33,7 +33,6 @@ import time
 #from __future__ import division
 #from __future__ import print_function
 import random
-from pyknp import Jumanpp
 #tf.app.flags.DEFINE_string('f', '', 'kernel')
 
 print(tf.__version__)
@@ -54,7 +53,7 @@ print(tf.keras.__version__)
 
 START_ID = 1
 END_ID = 2
-PAD_ID = 10000
+PAD_ID = 16000
 
 input_path = "./seq2seq/tweets/input_text_70000.txt"
 output_wakachi = "./seq2seq/tweets/target_wakachi_70000.txt"
@@ -65,7 +64,7 @@ out_voc_path = "./seq2seq/tweets/target_text_voc.txt"
 BATCH_SIZE = 256
 bert_dim = 768
 embedding_dim = 256
-vocab_out_size = 10001
+vocab_out_size = 16001
 units = 1024
 
 #bucketの種類
@@ -139,7 +138,7 @@ class OutputIndex():
     def create_index(self):
         with open(self.voc_path, mode = "r") as voc:
             lines = voc.readlines()
-            self.idx2word = dict((i,sen.rstrip("\n"))for i, sen in enumerate(lines[:10000]))
+            self.idx2word = dict((i,sen.rstrip("\n"))for i, sen in enumerate(lines[:16000]))
             self.idx2word[PAD_ID] = "PAD"
             
             for index, word in self.idx2word.items():
@@ -157,10 +156,10 @@ class OutputIndex():
                 
                 line = line.rstrip("\n")
                 splitted_list = line.split(" ")
-                splitted_list.insert(0, "<s>")
-                splitted_list.insert(len(splitted_list), "</s>")
+                splitted_list.insert(0, self.idx2word["2"])
+                splitted_list.insert(len(splitted_list),self.idx2word["3"])
                 #sys.stdout.write("{}\n".format(splitted_list))
-                output_tensor.append([self.word2idx.get(w, 0) for w in splitted_list])
+                output_tensor.append([self.word2idx.get(w, self.word2idx["<UNK>"]) for w in splitted_list])
         print("Success Create target-tensor\n")
         
         return output_tensor
@@ -449,8 +448,8 @@ def evaluate(emb_sentence, encoder, decoder, out_obj):
 
         result += out_obj.idx2word[predicted_id]
 
-        if out_obj.idx2word[predicted_id] == "</s>":
-            return result, sentence, attention_plot
+        if out_obj.idx2word[predicted_id] == "<EOS>":
+            return result, emb_sentence, attention_plot
         
         # the predicted ID is fed back into the model
         dec_input = tf.expand_dims([predicted_id], 0)
@@ -510,7 +509,7 @@ optimizer = tf.train.AdamOptimizer()
 total_losses = []
 encoder = Encoder(units, BATCH_SIZE)
 decoder = Decoder(vocab_out_size, embedding_dim, units, BATCH_SIZE)
-checkpoint_dir = './training_checkpoints_with_bert_2'
+checkpoint_dir = './seq2seq/training_checkpoints_with_bert_3'
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")               
 checkpoint = tf.train.Checkpoint(optimizer=optimizer, encoder=encoder,decoder=decoder)
 inp_obj = InputEmbedding(input_path)

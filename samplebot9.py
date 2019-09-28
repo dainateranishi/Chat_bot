@@ -51,6 +51,8 @@ class SampleBot:
 
         # ユーザ発話をcontextに追加
         self.user_context[update.message.from_user.id]["context"].append(update.message.text)
+        
+        print(self.user_context[update.message.from_user.id]["count"])
 
         send_message = self.reply_info.get_reply(update.message.text, self.user_context[update.message.from_user.id]["count"])
        

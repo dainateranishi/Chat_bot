@@ -1,1 +1,5 @@
 seq2seq/training_checkpoints_with_bert_2/ckpt-1.data-00000-of-00001 filter=lfs diff=lfs merge=lfs -text
+seq2seq/training_checkpoints_with_bert_3/ filter=lfs diff=lfs merge=lfs -text
+seq2seq/training_checkpoints_with_bert_3/ckpt-1.data-00000-of-00001 filter=lfs diff=lfs merge=lfs -text
+seq2seq/training_checkpoints_with_bert_3/ckpt-1.index filter=lfs diff=lfs merge=lfs -text
+seq2seq/training_checkpoints_with_bert_3/checkpoint filter=lfs diff=lfs merge=lfs -text
